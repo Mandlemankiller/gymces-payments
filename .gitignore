@@ -1,0 +1,9 @@
+# Virtual environment
+/venv
+
+# Payments data
+# accounts.json, groups.json and payments.json
+/data
+
+# Exports
+/target
