@@ -22,15 +22,19 @@ if __name__ == '__main__':
     with open('../data/accounts.json', 'r') as file:
         accounts: Dict[str, List[str]] = json.load(file)
 
+    with open('../data/config.json', 'r') as file:
+        config: Dict[str, str] = json.load(file)
+
+    with open('../data/qrs.json', 'r') as file:
+        qrs: Dict[int, str] = json.load(file)
+
     if len(payments) == 0:
         last_id: int = -1
     else:
         last_id: int = payments[len(payments) - 1]['id']
     id_str: str = f'{last_id + 1:04}'
 
-    with open('../data/config.json', 'r') as file:
-        config: Dict[str, str] = json.load(file)
-        iban: str = config['iban']
+    iban: str = config['iban']
 
     title: str = input('Title: ')
     amount: float = 0
@@ -79,7 +83,10 @@ if __name__ == '__main__':
             "people": people,
             "cash": [],
             "date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            "variable": variable_symbol,
-            "qr": str(image.to_string())
+            "variable": variable_symbol
         })
         json.dump(payments, file, ensure_ascii=False)
+
+    with open('../data/qrs.json', 'w') as file:
+        qrs[int(id_str)] = str(image.to_string())
+        json.dump(qrs, file, ensure_ascii=False)
