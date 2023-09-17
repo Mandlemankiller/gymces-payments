@@ -23,15 +23,31 @@ if __name__ == '__main__':
             fatal('Invalid id value!')
 
     payment: Dict = payments[check_id]
-    unpaid: List[str] = list(payment['people'])
+    unpaid: List[str] = payment['people'].copy()
     paid: List[str] = []
     incorrect: List[str] = []
     cash: List[str] = []
 
-    csv_path: str = input('CSV export file path: ')
-    csv_path = csv_path.replace('file://', '')
-    if not os.path.exists(csv_path):
-        fatal('That file does not exist!')
+    csv_folder_path: str = '../data/csv'
+
+    csv_name_input: str = input('CSV export file path (leave empty for most recent from CSV data): ')
+    if csv_name_input == '':
+        files: List[str] = os.listdir(csv_folder_path)
+        csvs: List[str] = [file for file in files if file.endswith('.csv')]
+        if not csvs:
+            fatal('There are no .csv files to choose from!')
+        timestamps: Dict[str, float] = {}
+
+        for csv_file in csvs:
+            csv_path = os.path.join(csv_folder_path, csv_file)
+            timestamp: float = os.path.getmtime(csv_path)
+            timestamps[csv_path] = timestamp
+        csv_path: str = max(timestamps, key=timestamps.get)
+        print(f'Using {os.path.basename(csv_path)} for CSV file')
+    else:
+        csv_path: str = csv_name_input.replace('file://', '')
+        if not os.path.exists(csv_path):
+            fatal('That file does not exist!')
 
     with open(csv_path, 'r', newline='', encoding='cp1250') as file:
         reader: csv.DictReader = csv.DictReader(file, delimiter=';')
