@@ -28,7 +28,10 @@ if __name__ == '__main__':
         last_id: int = payments[len(payments) - 1]['id']
     id_str: str = f'{last_id + 1:04}'
 
-    iban: str = 'CZ1430300000001086585111'
+    with open('../data/config.json', 'r') as file:
+        config: Dict[str, str] = json.load(file)
+        iban: str = config['iban']
+
     title: str = input('Title: ')
     amount: float = 0
     try:
@@ -66,7 +69,7 @@ if __name__ == '__main__':
     if not os.path.exists('../target/'):
         os.mkdir('../target')
 
-    image.save(f'../target/{int(id_str)}-{title}.svg')
+    image.save(f'../target/{int(id_str)}_{title}.svg')
 
     with open('../data/payments.json', 'w') as file:
         payments.append({
