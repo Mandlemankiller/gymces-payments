@@ -74,7 +74,8 @@ if __name__ == '__main__':
         for account_name, grouped_amount in grouped_payments.items():
             if grouped_amount != payment['amount']:
                 warning(f'{account_name} paid incorrect amount ({grouped_amount} CZK)!')
-                unpaid.remove(account_name)
+                if account_name in unpaid:
+                    unpaid.remove(account_name)
                 incorrect.append(account_name + f' ({grouped_amount} CZK)')
             else:
                 if account_name in unpaid:
