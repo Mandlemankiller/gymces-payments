@@ -2,6 +2,7 @@ from datetime import datetime
 
 from qr.spayd import QRPaymentGenerator
 from qr.svg import QRPaymentSVGImage
+from transformer import gen_png
 from typing import *
 import json
 from common import *
@@ -73,7 +74,10 @@ if __name__ == '__main__':
     if not os.path.exists('../target/'):
         os.mkdir('../target')
 
-    image.save(f'../target/{int(id_str)}_{title}.svg')
+    img_path: str = f'../target/{int(id_str)}_{title}.svg'
+
+    image.save(img_path)
+    gen_png(img_path)
 
     with open('../data/payments.json', 'w') as file:
         payments.append({
