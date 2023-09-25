@@ -23,8 +23,8 @@ if __name__ == '__main__':
             fatal('Invalid id value!')
 
     payment: Dict = payments[check_id]
-    unpaid: List[str] = payment['people'].copy()
-    paid: List[str] = []
+    missing: List[str] = payment['people'].copy()
+    credit: List[str] = []
     incorrect: List[str] = []
     cash: List[str] = []
 
@@ -74,24 +74,24 @@ if __name__ == '__main__':
         for account_name, grouped_amount in grouped_payments.items():
             if grouped_amount != payment['amount']:
                 warning(f'{account_name} paid incorrect amount ({grouped_amount} CZK)!')
-                if account_name in unpaid:
-                    unpaid.remove(account_name)
+                if account_name in missing:
+                    missing.remove(account_name)
                 incorrect.append(account_name + f' ({grouped_amount} CZK)')
             else:
-                if account_name in unpaid:
-                    unpaid.remove(account_name)
+                if account_name in missing:
+                    missing.remove(account_name)
                 else:
                     warning(f'{account_name} was not supposed to pay!')
-                paid.append(account_name)
+                credit.append(account_name)
 
         for account_name in payment['cash']:
-            unpaid.remove(account_name)
+            missing.remove(account_name)
             cash.append(account_name)
 
     print('==================================================================')
-    print(f'\033[1;36mTotal people: \033[0;36m{len(payment["people"])}\033[0m\n')
-    print(f'\033[1;32mPaid ({len(paid)}): \033[0;32m[' + ', '.join(paid) + ']\033[0m')
+    print(f'\033[1;36mTotal: \033[0;36m{len(payment["people"])} people\033[0m\n')
+    print(f'\033[1;32mCredit ({len(credit)}): \033[0;32m[' + ', '.join(credit) + ']\033[0m')
     print(f'\033[1;34mCash ({len(cash)}): \033[0;34m[' + ', '.join(cash) + ']\033[0m')
     print(f'\033[1;33mIncorrect ({len(incorrect)}): \033[0;33m[' + ', '.join(incorrect) + ']\033[0m')
-    print(f'\033[1;31mUnpaid ({len(unpaid)}): \033[0;31m[' + ', '.join(unpaid) + ']\033[0m')
+    print(f'\033[1;31mMissing ({len(missing)}): \033[0;31m[' + ', '.join(missing) + ']\033[0m')
     print('==================================================================')
