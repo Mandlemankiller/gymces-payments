@@ -42,7 +42,7 @@ if __name__ == '__main__':
         amount = float(input('Amount: '))
     except ValueError:
         fatal('Invalid amount value!')
-    people_input: str = input('People: ')
+    people_input: str = input('People / Group: ')
     if people_input in groups.keys():
         people: List[str] = groups[people_input]
     else:
