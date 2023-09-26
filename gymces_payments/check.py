@@ -89,10 +89,11 @@ if __name__ == '__main__':
             missing.remove(account_name)
             cash.append(account_name)
 
-    print('==================================================================')
+    EQ: int = 800
+    print('=' * EQ)
     print(f'\033[1;36mTotal: \033[0;36m{len(payment["people"])} people\033[0m\n')
     print(f'\033[1;32mCredit ({len(credit)}): \033[0;32m[' + ', '.join(credit) + ']\033[0m')
     print(f'\033[1;34mCash ({len(cash)}): \033[0;34m[' + ', '.join(cash) + ']\033[0m')
     print(f'\033[1;33mIncorrect ({len(incorrect)}): \033[0;33m[' + ', '.join(incorrect) + ']\033[0m')
     print(f'\033[1;31mMissing ({len(missing)}): \033[0;31m[' + ', '.join(missing) + ']\033[0m')
-    print('==================================================================')
+    print('=' * EQ)
