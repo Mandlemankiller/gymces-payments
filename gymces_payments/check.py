@@ -77,6 +77,7 @@ if __name__ == '__main__':
                 if account_name in missing:
                     missing.remove(account_name)
                 incorrect.append(account_name + f' ({grouped_amount} CZK)')
+                credit.append('\033[1;33m' + account_name + '\033[0;32m')
             else:
                 if account_name in missing:
                     missing.remove(account_name)
