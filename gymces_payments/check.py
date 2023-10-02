@@ -24,9 +24,11 @@ if __name__ == '__main__':
 
     payment: Dict = payments[check_id]
     missing: List[str] = payment['people'].copy()
-    credit: List[str] = []
+    paid: List[str] = []
     incorrect: List[str] = []
-    cash: List[str] = []
+
+    amount_collected: float = 0
+    amount_total: float = payment['amount'] * len(payment['people'])
 
     csv_folder_path: str = '../data/csv'
 
@@ -72,28 +74,34 @@ if __name__ == '__main__':
                     warning(f'Unknown account number {account_number} with name {row["Název účtu protistrany"]}')
 
         for account_name, grouped_amount in grouped_payments.items():
+            amount_collected += grouped_amount
             if grouped_amount != payment['amount']:
                 warning(f'{account_name} paid incorrect amount ({grouped_amount} CZK)!')
                 if account_name in missing:
                     missing.remove(account_name)
                 incorrect.append(account_name + f' ({grouped_amount} CZK)')
-                credit.append('\033[1;33m' + account_name + '\033[0;32m')
+                paid.append('\033[1;33m' + account_name + '\033[0;32m')
             else:
                 if account_name in missing:
                     missing.remove(account_name)
                 else:
                     warning(f'{account_name} was not supposed to pay!')
-                credit.append(account_name)
+                paid.append(account_name)
 
-        for account_name in payment['cash']:
-            missing.remove(account_name)
-            cash.append(account_name)
+    for account_name in payment['cash']:
+        missing.remove(account_name)
+        paid.append('\033[0;34m' + account_name + '\033[0;32m')
 
     EQ: int = 800
     print('=' * EQ)
-    print(f'\033[1;36mTotal: \033[0;36m{len(payment["people"])} people\033[0m\n')
-    print(f'\033[1;32mCredit ({len(credit)}): \033[0;32m[' + ', '.join(credit) + ']\033[0m')
-    print(f'\033[1;34mCash ({len(cash)}): \033[0;34m[' + ', '.join(cash) + ']\033[0m')
+    print(f'\033[1;35m{payment["title"].upper()}\033[0m\n')
+    print(f'\033[1;36mTotal:\033[0m')
+    print(f'\033[0;36m{len(payment["people"])} people\033[0m')
+    print(
+        f'\033[0;36m{amount_collected}/{amount_total} CZK collected'
+        f' ({round(amount_collected / amount_total * 100, 2)}%)\033[0m\n'
+    )
+    print(f'\033[1;32mPaid ({len(paid)}): \033[0;32m[' + ', '.join(paid) + ']\033[0m')
     print(f'\033[1;33mIncorrect ({len(incorrect)}): \033[0;33m[' + ', '.join(incorrect) + ']\033[0m')
     print(f'\033[1;31mMissing ({len(missing)}): \033[0;31m[' + ', '.join(missing) + ']\033[0m')
     print('=' * EQ)
