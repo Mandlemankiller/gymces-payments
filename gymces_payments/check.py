@@ -90,6 +90,7 @@ if __name__ == '__main__':
 
     for account_name in payment['cash']:
         missing.remove(account_name)
+        amount_collected += payment['amount']
         paid.append('\033[0;34m' + account_name + '\033[0;32m')
 
     EQ: int = 800
