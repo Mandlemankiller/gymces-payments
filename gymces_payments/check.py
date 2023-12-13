@@ -89,9 +89,17 @@ if __name__ == '__main__':
                 paid.append(account_name)
 
     for account_name in payment['cash']:
-        missing.remove(account_name)
+        if account_name in missing:
+            missing.remove(account_name)
+        else:
+            warning(f'{account_name} was not supposed to pay!')
         amount_collected += payment['amount']
         paid.append('\033[0;34m' + account_name + '\033[0;32m')
+
+    if amount_total == 0:
+        percentage: str = "NaN"
+    else:
+        percentage: str = str(round(amount_collected / amount_total * 100, 2))
 
     EQ: int = 800
     print('=' * EQ)
@@ -100,7 +108,7 @@ if __name__ == '__main__':
     print(f'\033[0;36m{len(payment["people"])} people\033[0m')
     print(
         f'\033[0;36m{amount_collected}/{amount_total} CZK collected'
-        f' ({round(amount_collected / amount_total * 100, 2)}%)\033[0m\n'
+        f' ({percentage}%)\033[0m\n'
     )
     print(f'\033[1;32mPaid ({len(paid)}): \033[0;32m[' + ', '.join(paid) + ']\033[0m')
     print(f'\033[1;33mIncorrect ({len(incorrect)}): \033[0;33m[' + ', '.join(incorrect) + ']\033[0m')
