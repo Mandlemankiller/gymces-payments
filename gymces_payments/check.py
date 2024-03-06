@@ -101,7 +101,7 @@ if __name__ == '__main__':
     else:
         percentage: str = str(round(amount_collected / amount_total * 100, 2))
 
-    EQ: int = 800
+    EQ: int = 173
     print('=' * EQ)
     print(f'\033[1;35m{payment["title"].upper()}\033[0m\n')
     print(f'\033[1;36mTotal:\033[0m')
